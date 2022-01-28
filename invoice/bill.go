@@ -92,7 +92,7 @@ func (b *Bill) makeHeader() func() {
 		}
 
 		b.pdf.SetFont(b.config.Business.SansFont, "BI", 28)
-		b.pdf.ImageOptions(b.config.Business.ImageFile, 0, 10, 100, 0, false, gofpdf.ImageOptions{}, 0, "")
+		b.pdf.ImageOptions(b.config.Business.ImageFile, 10, 10, 100, 0, false, gofpdf.ImageOptions{}, 0, "")
 
 		// Invoice Text
 		b.pdf.SetXY(140, 30)
@@ -111,7 +111,7 @@ func (b *Bill) makeHeader() func() {
 		b.darkText()
 		b.text(20, 0, "Invoice #:")
 		b.lightText()
-		b.text(20, 0, invoiceDate.Format("Jan22006"))
+		b.text(20, 0, InvoiceNumber)
 
 		// Biller Name, Address
 		b.pdf.SetXY(8, 40)
@@ -319,8 +319,8 @@ func (b *Bill) drawBankDetails() {
 	b.pdf.Ln(5)
 	b.pdf.SetFont(b.config.Business.SerifFont, "", 8)
 	headers := []string{
-		"Pay By", "Bank Name", "Address", "Account Type (checking/Savings)",
-		"IBAN (international)", "Sort Code (international)", "SWIFT/BIC (international)",
+		"Pay By", "Bank Name", "Account Type",
+		"Account Number", "Routing Number",
 	}
 
 	b.pdf.SetDrawColor(64, 64, 64)

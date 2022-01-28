@@ -15,6 +15,8 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
+var InvoiceNumber string
+
 type BusinessDetails struct {
 	Name      string `yaml:"name"`
 	Person    string `yaml:"person"`
@@ -75,16 +77,18 @@ type TaxDetails struct {
 type BankDetails struct {
 	TransferType string `yaml:"transfer_type"`
 	Name         string
-	Address      string
-	AccountType  string `yaml:"account_type"`
-	IBAN         string
-	SortCode     string `yaml:"sort_code"`
-	SWIFTBIC     string `yaml:"swift_bic"`
+	// Address      string
+	AccountType   string `yaml:"account_type"`
+	RoutingNumber string `yaml:"routing_number"`
+	AccountNumber string `yaml:"account_number"`
+	// IBAN         string
+	// SortCode     string `yaml:"sort_code"`
+	// SWIFTBIC     string `yaml:"swift_bic"`
 }
 
 func (b *BankDetails) Strings() []string {
 	return []string{
-		b.TransferType, b.Name, b.Address, b.AccountType, b.IBAN, b.SortCode, b.SWIFTBIC,
+		b.TransferType, b.Name, b.AccountType, b.AccountNumber, b.RoutingNumber,
 	}
 }
 
@@ -117,8 +121,10 @@ type BillingConfig struct {
 // ParseConfig parses the YAML config file which contains the settings for the
 // bill we're going to process. It uses a simple FuncMap to template the text,
 // allowing the billing items to describe the current date range.
-func ParseConfig(filename string, billingDate string, outputDir string) (*BillingConfig, error) {
+func ParseConfig(filename, billingDate, outputDir, invoiceNumber string) (*BillingConfig, error) {
 	billTime := now.New(now.MustParse(billingDate))
+
+	InvoiceNumber = invoiceNumber
 
 	funcMap := template.FuncMap{
 		"endOfNextMonth": func() string {

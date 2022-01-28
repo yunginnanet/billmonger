@@ -16,9 +16,10 @@ const (
 )
 
 type CliConfig struct {
-	ConfigFile  *string
-	BillingDate *string
-	OutputDir   *string
+	ConfigFile    *string
+	BillingDate   *string
+	OutputDir     *string
+	InvoiceNumber *string
 }
 
 func checkImageFile(config *invoice.BillingConfig) error {
@@ -31,7 +32,8 @@ func main() {
 		ConfigFile: kingpin.Flag("config-file", "The YAML config file to use").Short('c').Default("billing.yaml").String(),
 		BillingDate: kingpin.Flag("billing-date", "The date to assume the bill is written on").
 			Short('b').Default(time.Now().Format("2006-01-02")).String(),
-		OutputDir: kingpin.Flag("output-dir", "The output directory to use. Overridden by config file.").Short('o').Default(".").String(),
+		OutputDir:     kingpin.Flag("output-dir", "The output directory to use. Overridden by config file.").Short('o').Default(".").String(),
+		InvoiceNumber: kingpin.Flag("invoice-number", "The invoice number.").Short('i').Default(time.Now().Format("Jan22006")).String(),
 	}
 	kingpin.Parse()
 
@@ -42,7 +44,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	config, err := invoice.ParseConfig(*cli.ConfigFile, *cli.BillingDate, *cli.OutputDir)
+	config, err := invoice.ParseConfig(*cli.ConfigFile, *cli.BillingDate, *cli.OutputDir, *cli.InvoiceNumber)
 	if err != nil {
 		println(err.Error())
 		os.Exit(1)

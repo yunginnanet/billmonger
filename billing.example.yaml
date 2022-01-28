@@ -17,7 +17,7 @@ bill_to:
 # Description fields for the bill
 bill:
   department: "Awesome Engineering Dept"
-  currency:   "EUR"
+  currency:   "USD"
   payment_terms: "Net 30"
   due_date: "{{ endOfNextMonth }}"
   # This controls whether or not the date in the upper right is rounded
@@ -30,11 +30,11 @@ billables:
   - quantity:    1
     description: "Services rendered as awesome consultant for period {{ billingPeriod }}"
     unit_price:  1234.56
-    currency:    €
+    currency:    $
   - quantity:    20
     description: "Floppy disks"
     unit_price:  10.23
-    currency:    €
+    currency:    $
 
 # You may enter tax as a percentage here (from 0 to 1.0). This will
 # be applied to all items on the invoice.
@@ -45,15 +45,9 @@ tax:
 # Where to send the money!
 bank:
   # Any fields you don't specify here, will be left entirely off
-  # the invoice. Some countries use sort codes and some SWIFT or
-  # BIC codes, for example. You might not have a bank address.
-  transfer_type: "Wire"
   name:          "Acme Bank"
-  address:       "-"
-  account_type:  "Checking"
-  iban:          "DE99 5555 5555 5555 5555 55"
-  sort_code:     "12-12-12"
-  #swift_bic:     "ABCXYZ"
+  account_number:  "12345"
+  routing_number:  "12345"
 
 # Branding colors to use on the bill, assumes a light color
 # and a dark color. If you use two dark colors, it will be ugly.
