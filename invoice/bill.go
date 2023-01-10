@@ -69,6 +69,14 @@ func (b *Bill) darkDrawColor() {
 	)
 }
 
+func (b *Bill) darkFillColor() {
+	b.pdf.SetFillColor(
+		b.config.Colors.ColorDark.R,
+		b.config.Colors.ColorDark.G,
+		b.config.Colors.ColorDark.B,
+	)
+}
+
 func (b *Bill) lightFillColor() {
 	b.pdf.SetFillColor(
 		b.config.Colors.ColorLight.R,
@@ -92,7 +100,7 @@ func (b *Bill) makeHeader() func() {
 		}
 
 		b.pdf.SetFont(b.config.Business.SansFont, "BI", 28)
-		b.pdf.ImageOptions(b.config.Business.ImageFile, 10, 10, 100, 0, false, gofpdf.ImageOptions{}, 0, "")
+		b.pdf.ImageOptions(b.config.Business.ImageFile, -10, 12, 21, 0, false, gofpdf.ImageOptions{}, 0, "")
 
 		// Invoice Text
 		b.pdf.SetXY(140, 30)
@@ -104,13 +112,13 @@ func (b *Bill) makeHeader() func() {
 		b.darkText()
 		b.pdf.SetFont(b.config.Business.SerifFont, "", 12)
 		b.text(20, 0, "Date:")
-		b.lightText()
+		b.darkText()
 		b.text(20, 0, invoiceDate.Format("January 2, 2006"))
 
 		b.pdf.SetXY(140, 45)
 		b.darkText()
 		b.text(20, 0, "Invoice #:")
-		b.lightText()
+		b.darkText()
 		b.text(20, 0, InvoiceNumber)
 
 		// Biller Name, Address
@@ -141,7 +149,7 @@ func (b *Bill) makeFooter() func() {
 		b.pdf.SetXY(8.0, 280)
 		b.darkText()
 		b.text(143, 0, b.config.Business.Name)
-		b.lightText()
+		b.darkText()
 		b.text(40, 0, "Generated: "+time.Now().UTC().Format("2006-01-02 15:04:05"))
 	}
 }
@@ -181,10 +189,10 @@ func (b *Bill) drawBillTo() {
 
 	b.text(0, 0, "To: ")
 	b.pdf.SetX(20)
-	b.text(0, 0, b.config.BillTo.Email)
+	b.text(0, 0, b.config.BillTo.Name)
 	b.pdf.Ln(5)
 	b.pdf.SetX(20)
-	b.text(0, 0, b.config.BillTo.Name)
+	b.text(0, 0, b.config.BillTo.Email)
 	b.pdf.Ln(5)
 	b.pdf.SetX(20)
 	b.text(0, 0, b.config.BillTo.Street)
@@ -202,7 +210,7 @@ func (b *Bill) drawBillTable(headers []string, values []string) {
 	b.pdf.SetFillColor(255, 0, 0)
 	b.whiteText()
 	b.pdf.SetDrawColor(64, 64, 64)
-	b.lightFillColor()
+	b.darkFillColor()
 	b.pdf.SetLineWidth(0.3)
 	b.pdf.SetFont(b.config.Business.SerifFont, "B", 10)
 
@@ -239,7 +247,7 @@ func (b *Bill) drawBillablesTable(headers []string, billables []BillableItem, ta
 	b.pdf.SetFillColor(255, 0, 0)
 	b.whiteText()
 	b.pdf.SetDrawColor(64, 64, 64)
-	b.lightFillColor()
+	b.darkFillColor()
 	b.pdf.SetLineWidth(0.3)
 	b.pdf.SetFont(b.config.Business.SerifFont, "B", 10)
 
@@ -324,7 +332,7 @@ func (b *Bill) drawBankDetails() {
 	}
 
 	b.pdf.SetDrawColor(64, 64, 64)
-	b.lightFillColor()
+	b.darkFillColor()
 	for i, v := range b.config.Bank.Strings() {
 		if v == "" {
 			continue
